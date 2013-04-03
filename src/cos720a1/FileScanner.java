@@ -57,13 +57,13 @@ public class FileScanner {
         fileInputStream = new FileInputStream(this.file);
         fileInput = new BufferedInputStream (fileInputStream);
 
-        char b = (char)fileInput.read();
+        int b = fileInput.read();
         boolean found = false;
         while (b >= 0) {
-            b = (char)fileInput.read();
+
             // 1 scan until a character matches
             while (b != sig[0]) {
-                b = (char)fileInput.read();
+                b = fileInput.read();
                 if (b < 0) {
                     return false;
                 }
@@ -73,7 +73,7 @@ public class FileScanner {
             fileInput.mark(999999);
             found = true;
             for (int i = 1; i < this.pattern.length(); i++) {
-                b = (char)fileInput.read();
+                b = fileInput.read();
                 if (b != sig[i]) {
                     found = false;
                     break;
@@ -86,6 +86,7 @@ public class FileScanner {
                 return true;
             }
             fileInput.reset();
+            b = fileInput.read();
         }
         return false;
     }
