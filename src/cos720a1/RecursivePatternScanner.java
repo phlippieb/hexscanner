@@ -27,7 +27,6 @@ public class RecursivePatternScanner {
             File candidate = i.next();
             scanner.setFile(candidate);
             if (scanner.fileContainsPattern()) {
-                System.out.println ("  FOUND PATTERN");
                 returnList.add(candidate);
             }
 

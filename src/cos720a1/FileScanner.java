@@ -44,122 +44,101 @@ public class FileScanner {
     }
 
     public boolean fileContainsPattern () throws Exception {
-        //try {
-            System.out.println("  scanning "+this.file.getAbsolutePath());
 
-            char [] sig = this.pattern.toCharArray();
+        try {
+            fileInputStream.close();
+        } catch (Exception e) {}
+        try {
+            fileInput.close();
+        } catch (Exception e) {}
 
-            /*try {
-                fileInputStream.close();
-            } catch (Exception e) {}
-            try {
-                fileInput.close();
-            } catch (Exception e) {}*/
+        char [] sig = this.pattern.toCharArray();
 
-            fileInputStream = new FileInputStream(this.file);
-            fileInput = new BufferedInputStream (fileInputStream);
+        fileInputStream = new FileInputStream(this.file);
+        fileInput = new BufferedInputStream (fileInputStream);
 
-            char b = (char)fileInput.read();
-            boolean found = false;
-            while (b >= 0) {
-
-                System.out.println("main loop");
+        char b = (char)fileInput.read();
+        boolean found = false;
+        while (b >= 0) {
+            b = (char)fileInput.read();
+            // 1 scan until a character matches
+            while (b != sig[0]) {
                 b = (char)fileInput.read();
-                // 1 scan until a character matches
-                while (b != sig[0]) {
-                    System.out.println("   inner 1: no match");
-                    b = (char)fileInput.read();
-                    if (b < 0) {
-                        System.out.println("eof");
-                        return false;
-                    }
+                if (b < 0) {
+                    return false;
                 }
-
-                // mark and check rest
-                System.out.println("   inner 2: match[0]");
-                fileInput.mark(999999);
-                found = true;
-                for (int i = 1; i < this.pattern.length(); i++) {
-                    b = (char)fileInput.read();
-                    if (b != sig[i]) {
-                        System.out.println("      mismatch on ["+i+"]");
-                        found = false;
-                        break;
-                    }
-                    if (b < 0) {
-                        System.out.println("eof");
-                        return false;
-                    }
-                }
-                if (found) {
-                    System.out.println("eof");
-                    return true;
-                }
-                fileInput.reset();
             }
 
-
-        /*} catch (Exception e) {
-            //System.out.println("Exception caught:" + e);
-        }*/
+            // mark and check rest
+            fileInput.mark(999999);
+            found = true;
+            for (int i = 1; i < this.pattern.length(); i++) {
+                b = (char)fileInput.read();
+                if (b != sig[i]) {
+                    found = false;
+                    break;
+                }
+                if (b < 0) {
+                    return false;
+                }
+            }
+            if (found) {
+                return true;
+            }
+            fileInput.reset();
+        }
         return false;
     }
 
+    // DONT USE THIS!!!
     public boolean fileContainsPattern (String pattern) throws Exception {
-        System.out.println("  scanning " + this.file.getAbsolutePath());
+        char [] sig = pattern.toCharArray();
+
         try {
-            char [] sig = pattern.toCharArray();
+            fileInputStream.close();
+        } catch (Exception e) {}
+        try {
+            fileInput.close();
+        } catch (Exception e) {}
 
-            /*try {
-                fileInputStream.close();
-            } catch (Exception e) {}
-            try {
-                fileInput.close();
-            } catch (Exception e) {}*/
-            
-            fileInputStream = new FileInputStream(this.file);
-            fileInput = new BufferedInputStream (fileInputStream);
+        fileInputStream = new FileInputStream(this.file);
+        fileInput = new BufferedInputStream (fileInputStream);
 
-            int b = fileInput.read();
-            boolean found = false;
-            while (b >= 0) {
+        int b = fileInput.read();
+        boolean found = false;
+        while (b >= 0) {
 
-                // 1 scan until a character matches
-                while (b != sig[0]) {
-                    b = fileInput.read();
-                    if (b < 0) {
-                        fileInput.close();
-                        fileInputStream.close();
-                        return false;
-                    }
-                }
-
-                // mark and check rest
-                fileInput.mark(999999);
-                found = true;
-                for (int i = 0; i < pattern.length(); i++) {
-                    b = fileInput.read();
-                    if (b != sig[i]) {
-                        found = false;
-                        break;
-                    }
-                    if (b < 0) {
-                        fileInput.close();
-                        fileInputStream.close();
-                        return false;
-                    }
-                    b = fileInput.read();
-                }
-                if (found) {
+            // 1 scan until a character matches
+            while (b != sig[0]) {
+                b = fileInput.read();
+                if (b < 0) {
                     fileInput.close();
                     fileInputStream.close();
-                    return true;
+                    return false;
                 }
             }
 
-
-        } catch (Exception e) {
-            //System.out.println("Exception caught:" + e);
+            // mark and check rest
+            fileInput.mark(999999);
+            found = true;
+            for (int i = 0; i < pattern.length(); i++) {
+                b = fileInput.read();
+                if (b != sig[i]) {
+                    found = false;
+                    break;
+                }
+                if (b < 0) {
+                    fileInput.close();
+                    fileInputStream.close();
+                    return false;
+                }
+                b = fileInput.read();
+            }
+            if (found) {
+                fileInput.close();
+                fileInputStream.close();
+                return true;
+            }
         }
         
         return false;
