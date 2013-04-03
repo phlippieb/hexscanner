@@ -26,7 +26,7 @@ public class RecursivePatternScanner {
         System.out.println("[info]   building file list...");
         for (Iterator<File> i = stepper.getFileList().iterator();i.hasNext();) {
             File candidate = i.next();
-            System.out.println("[info]   scanning file for matches: " + candidate.getName());
+            System.out.println("[info]   scanning: " + candidate.getAbsolutePath());
             scanner.setFile(candidate);
             if (scanner.fileContainsPattern()) {
                 returnList.add(candidate);
