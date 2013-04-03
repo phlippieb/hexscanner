@@ -58,6 +58,8 @@ public class VirusScanner {
                     return;
                 }
 
+                System.out.println ("Scanning from "+root+" for pattern "+pattern);
+
                 RecursivePatternScanner s = new RecursivePatternScanner();
                 try {
                     ArrayList<File> matches = s.scan(root, pattern);

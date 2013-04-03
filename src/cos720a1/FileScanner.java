@@ -49,45 +49,53 @@ public class FileScanner {
 
             char [] sig = this.pattern.toCharArray();
 
-            try {
+            /*try {
                 fileInputStream.close();
             } catch (Exception e) {}
             try {
                 fileInput.close();
-            } catch (Exception e) {}
+            } catch (Exception e) {}*/
 
             fileInputStream = new FileInputStream(this.file);
             fileInput = new BufferedInputStream (fileInputStream);
 
-            int b = fileInput.read();
+            char b = (char)fileInput.read();
             boolean found = false;
             while (b >= 0) {
 
+                System.out.println("main loop");
+                b = (char)fileInput.read();
                 // 1 scan until a character matches
-                while (b != sig[0]) {b = fileInput.read();
-                    b = fileInput.read();
+                while (b != sig[0]) {
+                    System.out.println("   inner 1: no match");
+                    b = (char)fileInput.read();
                     if (b < 0) {
+                        System.out.println("eof");
                         return false;
                     }
                 }
 
                 // mark and check rest
+                System.out.println("   inner 2: match[0]");
                 fileInput.mark(999999);
                 found = true;
-                for (int i = 0; i < this.pattern.length(); i++) {
-                    b = fileInput.read();
+                for (int i = 1; i < this.pattern.length(); i++) {
+                    b = (char)fileInput.read();
                     if (b != sig[i]) {
+                        System.out.println("      mismatch on ["+i+"]");
                         found = false;
                         break;
                     }
                     if (b < 0) {
+                        System.out.println("eof");
                         return false;
                     }
-                    b = fileInput.read();
                 }
                 if (found) {
+                    System.out.println("eof");
                     return true;
                 }
+                fileInput.reset();
             }
 
 
@@ -102,12 +110,12 @@ public class FileScanner {
         try {
             char [] sig = pattern.toCharArray();
 
-            try {
+            /*try {
                 fileInputStream.close();
             } catch (Exception e) {}
             try {
                 fileInput.close();
-            } catch (Exception e) {}
+            } catch (Exception e) {}*/
             
             fileInputStream = new FileInputStream(this.file);
             fileInput = new BufferedInputStream (fileInputStream);
