@@ -3,6 +3,7 @@ package cos720a1;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 /**
  *
  * @author phlippie
@@ -51,6 +52,11 @@ public class FileScanner {
         try {
             fileInput.close();
         } catch (Exception e) {}
+
+        if (! this.file.exists()) {
+            //return false; //ignore
+            throw new FileNotFoundException("File " + this.file.getName() + " at " + this.file.getAbsolutePath() + " does not exist anymore");
+        }
 
         char [] sig = this.pattern.toCharArray();
 

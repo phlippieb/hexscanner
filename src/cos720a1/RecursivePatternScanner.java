@@ -1,6 +1,7 @@
 package cos720a1;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -28,8 +29,12 @@ public class RecursivePatternScanner {
             File candidate = i.next();
             System.out.println("[info]   scanning: " + candidate.getAbsolutePath());
             scanner.setFile(candidate);
-            if (scanner.fileContainsPattern()) {
-                returnList.add(candidate);
+            try {
+                if (scanner.fileContainsPattern()) {
+                    returnList.add(candidate);
+                }
+            } catch (FileNotFoundException e) {
+                System.out.println (e);
             }
 
         }
