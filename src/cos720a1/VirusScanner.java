@@ -61,11 +61,13 @@ public class VirusScanner {
                 RecursivePatternScanner s = new RecursivePatternScanner();
                 try {
                     ArrayList<File> matches = s.scan(root, pattern);
+                    System.out.println ("[info]   scan complete.");
+                    System.out.println();
                     System.out.println ("Matching files:");
                     for (Iterator<File> i = matches.iterator(); i.hasNext();) {
                         System.out.println(i.next().getAbsolutePath());
                     }
-                    System.out.println ("done");
+                    System.out.println();
                 } catch (Exception e) {
                     System.out.println(e);
                     return;

@@ -23,9 +23,13 @@ public class RecursivePatternScanner {
         scanner.setPattern(pattern);
 
         ArrayList<File> returnList = new ArrayList<File>();
+        ArrayList<File> scanList;
 
         System.out.println("[info]   building file list...");
-        for (Iterator<File> i = stepper.getFileList().iterator();i.hasNext();) {
+        scanList = stepper.getFileList();
+        System.out.println("[info]   " + scanList.size() + " files found");
+        System.out.println("[info]   starting scan...");
+        for (Iterator<File> i = scanList.iterator();i.hasNext();) {
             File candidate = i.next();
             System.out.println("[info]   scanning: " + candidate.getAbsolutePath());
             scanner.setFile(candidate);
@@ -34,7 +38,7 @@ public class RecursivePatternScanner {
                     returnList.add(candidate);
                 }
             } catch (FileNotFoundException e) {
-                System.out.println (e);
+                System.out.println ("[warning]   " +e);
             }
 
         }
