@@ -56,10 +56,8 @@ public class RecursivePatternScanner {
                     }
                 } catch (FileNotFoundException fnfe) {
                     System.out.println ("[warning]   " +fnfe);
-                    System.out.println (fnfe.getStackTrace());
                 } catch (Exception e) {
                     System.out.println ("[error]   "+e);
-                    System.out.println (e.toString());
                 }
             }
         } catch (Exception e) {

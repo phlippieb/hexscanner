@@ -31,6 +31,7 @@ public class ByteUtils {
         RandomAccessFile f = new RandomAccessFile(file.getAbsolutePath(), "r");
         byte[] b = new byte[(int)f.length()];
         f.read(b);
+        f.close();
         return b;
     }
 
