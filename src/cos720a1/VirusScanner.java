@@ -35,19 +35,18 @@ public class VirusScanner {
 
         String root = args[0];
         String asciiPattern = args[1];
-        String pattern = "";
-        File patternFile;
-        try {
-            pattern = HexAsciiToBinaryConverter.convert(asciiPattern);
-        } catch (Exception e) {
-            System.out.println ("Invalid pattern:" + args[1]);
-            System.out.println (e);
-            return;
-        }
+        //String pattern = "";
+        //try {
+        //    pattern = HexAsciiToBinaryConverter.convert(asciiPattern);
+        //} catch (Exception e) {
+        //    System.out.println ("Invalid pattern:" + args[1]);
+        //    System.out.println (e);
+        //    return;
+        //}
 
         RecursivePatternScanner s = new RecursivePatternScanner();
         try {
-            ArrayList<File> matches = s.scan(root, pattern);
+            ArrayList<File> matches = s.scan(root, asciiPattern);
             System.out.println ("[info]   scan complete.");
             System.out.println();
             System.out.println ("Matching files:");
