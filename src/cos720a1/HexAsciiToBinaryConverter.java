@@ -13,21 +13,25 @@ public class HexAsciiToBinaryConverter {
             throw new RuntimeException ("String contains odd number of characters. Must be even.");
         }
 
-        // first, check if string is valid:
+        //check if string contains only valid characters:
         for (int i = 0; i < ascii.length(); i++) {
             if (!isValidHexChar (ascii.charAt(i))) {
                 throw new RuntimeException ("String contains invalid data at position " + i);
             }
         }
 
+        System.out.println("[info]   Converting pattern to binary:");
+        System.out.print("         ");
         // next, process chars two by two into result.
         StringBuilder result = new StringBuilder ();
         int binaryValue = 0;
         for (int i = 0; i < ascii.length(); i += 2) {
             binaryValue = twoHexAsciiToInt(ascii.charAt(i), ascii.charAt(i + 1));
+            System.out.print("["+ascii.charAt(i)+ascii.charAt(i+1)+":"+(char)binaryValue+"] ");
             result.append((char)binaryValue);
         }
 
+        System.out.println();
         return result.toString();
     }
 

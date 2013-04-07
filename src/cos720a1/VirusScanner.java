@@ -25,78 +25,39 @@ public class VirusScanner {
      */
     public static void main(String[] args) {
 
-        String root, pattern = "";
-        if (args.length < 3 ||
-                (args[0].charAt(0) != 's' &&
-                 args[0].charAt(0) != 'c') ||
-                (args[0].charAt(0) != 's' &&
-                 args[0].charAt(0) != 'c'))
+        if (args.length < 2)
         {
-            System.out.println ("Usage:\nVirusScanner (s)can <root> <pattern file path>");
+            System.out.println ("Usage:\nVirusScanner <root> <pattern>");
             System.out.println ("  Where <root> is the root of the directory tree to search");
-            System.out.println ("  And <pattern file path> is the path to a file that contains the pattern to match");
-            System.out.println ("Or:\nVirusScanner (c)onvert <inputfile> <outputfile>");
-            System.out.println ("  Where <inputfile> is file containing an ascii hex representation of a string to convert to binary");
-            System.out.println ("  And <outputfile> is the name of a target file to store the converted string in");
+            System.out.println ("  And <pattern> is the pattern to match in hex-ascii");
             return;
         }
 
-        if (args[0].charAt(0) == 's') {
-                root = args[1];
-                File patternFile;
-                try {
-                    patternFile = new File (args[2]);
-                } catch (Exception e) {
-                    System.out.println ("Could not open patternfile " + args[2]);
-                    System.out.println(e);
-                    return;
-                } try {
-                    pattern = FileContentsToStringConverter.convert(patternFile);
-                } catch (Exception e) {
-                    System.out.println ("Could not read pattern file " + args[2]);
-                    System.out.println (e);
-                    return;
-                }
-
-                RecursivePatternScanner s = new RecursivePatternScanner();
-                try {
-                    ArrayList<File> matches = s.scan(root, pattern);
-                    System.out.println ("[info]   scan complete.");
-                    System.out.println();
-                    System.out.println ("Matching files:");
-                    for (Iterator<File> i = matches.iterator(); i.hasNext();) {
-                        System.out.println(i.next().getAbsolutePath());
-                    }
-                    System.out.println();
-                } catch (Exception e) {
-                    System.out.println(e);
-                    return;
-                }
+        String root = args[0];
+        String asciiPattern = args[1];
+        String pattern = "";
+        File patternFile;
+        try {
+            pattern = HexAsciiToBinaryConverter.convert(asciiPattern);
+        } catch (Exception e) {
+            System.out.println ("Invalid pattern:" + args[1]);
+            System.out.println (e);
+            return;
         }
-        
-        else if (args[0].charAt(0) == 'c') {
 
-            try {
-                File input = new File (args[1]);
-                File output = new File (args[2]);
-                if (! output.createNewFile()) {
-                    System.out.println ("warning: output file exists. attempt overwriting.");
-                    output.delete();
-                    output.createNewFile();
-                }
-
-                String ascii = FileContentsToStringConverter.convert(input);
-                ascii = ascii.substring(0, ascii.length()-1);
-                String binary = HexAsciiToBinaryConverter.convert(ascii);
-                System.out.println("Conversion complete. Result:");
-                System.out.println(binary.getBytes());
-                DataOutputStream outputstream = new DataOutputStream (new FileOutputStream (output));
-                outputstream.writeChars(binary);
-
-
-            } catch (Exception e) {
-                System.out.println(e);
+        RecursivePatternScanner s = new RecursivePatternScanner();
+        try {
+            ArrayList<File> matches = s.scan(root, pattern);
+            System.out.println ("[info]   scan complete.");
+            System.out.println();
+            System.out.println ("Matching files:");
+            for (Iterator<File> i = matches.iterator(); i.hasNext();) {
+                System.out.println(i.next().getAbsolutePath());
             }
+            System.out.println();
+        } catch (Exception e) {
+            System.out.println(e);
+            return;
         }
     }
 }
